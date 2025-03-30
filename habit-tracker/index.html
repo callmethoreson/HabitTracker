@@ -32,9 +32,15 @@
 
     <div>
         <form action="javascript:;" onsubmit=" addHabitFromButton(this) ">
-            <label for="habit">New Habit :</label>
+            <!-- <label for="habit">New Habit :</label> -->
             <input type="text" id="newHabitName" value=""><br><br>
             <input type="submit" value=" Add Habit ">
+          </form>
+    </div>
+    <br>
+    <div>
+        <form action="javascript:;" onsubmit=" hideSelectedItems(this) ">
+            <input type="submit" value=" Remove Habit(s) ">
           </form>
     </div>
 
@@ -42,6 +48,7 @@
 
     <script src="./Cursor.js"></script>
     <script src="./Habit.js"></script>
+    <script src="./HabitTable.js"></script>
     <script src="./app.js"></script>
 
 </body>

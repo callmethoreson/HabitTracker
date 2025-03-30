@@ -1,4 +1,4 @@
-class Habit extends HTMLElement{
+class Habit{
 
     static currID = 0;
 
@@ -9,7 +9,7 @@ class Habit extends HTMLElement{
 
 
     constructor(name) {
-        this.id = Habit.callcurrID;
+        this.id = Habit.currID;
         this.name = name;
         this.timesList = [
             0,
@@ -20,7 +20,7 @@ class Habit extends HTMLElement{
             0,
             0
         ];
-        this.checkboxState = 0;
+        this.markedForRemoval = false;
         Habit.currID++;
     }
 
@@ -28,26 +28,24 @@ class Habit extends HTMLElement{
         return this.name;
     }
 
-    getHabitAsRow(){
-        
-    }
-
-    addHabit(){
-        // if(obj['name']){
-        //     addHabit(obj.getName());
-        //     return;
-        // }else{
-        //     console.log("this object is not ideal for this function");
-        // }
-    
+    addHabit(){    
         const tableDiv = document.getElementById('tableDiv');
-    
+
+        var checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.setAttribute('data-habit-id', this.id);
+        checkbox.setAttribute('action', "javascript:;");
+        checkbox.setAttribute('onChange', "checkBoxChange(this)");
+
         var newElement = document.createElement('div');
-        newElement.innerHTML = '<form action="javascript:;" onsubmit=" removeHabit(this) "><input type = "checkbox"></form>'
+        newElement.setAttribute('data-habit-id', this.id);
+        newElement.appendChild(checkbox);
         tableDiv.appendChild(newElement);
+
     
         //create and add habit name div
         newElement = document.createElement('div');
+        newElement.setAttribute('data-habit-id', this.id);
         newElement.innerHTML = `<div class = habitText>${this.name}</div>`;
         tableDiv.appendChild(newElement);
 
@@ -57,31 +55,31 @@ class Habit extends HTMLElement{
         for(var i = 0; i < numDays; i++){
             //create element
             newElement = document.createElement('div');
+            newElement.setAttribute('data-habit-id', this.id);
             newElement.innerHTML = '<div><input type="number" min="0" oninput="toggleComplete()" class = "timeInput" placeholder="# Mins" data-habit = "Exercise"></div>';
             tableDiv.appendChild(newElement);
         }
 
     }
 
-    
+    updateCheckboxState(state){
+        this.markedForRemoval = state;
+        console.log(`Habit id: ${this.id}, Updated State -> ${this.markedForRemoval}`);
+    }
 
+    removeHabit(){
+        //console.log("trying to remove element: " + this.id);
+        //get all elements with this id
+    }
 
-  //need to define what data is needed to define a habit
-  //Do we keep the UI elements involved here aswell as the state?
-
-  //A habit for sure has the following things
-  //id
-  //name
-    //start simple with tracking times for a week
-  //just have a list of times starting at 0
-
-
-
-
-
-
-
-
+    hideHabit(){
+        console.log(`hiding habit ${this.id}`);
+        //get all elements with this id as an attribute
+        var items = document.querySelectorAll(`[data-habit-id="${this.id}"]`);
+        items.forEach( (item) => {
+            item.style.display = 'none';
+        });
+    }
 
 }
 

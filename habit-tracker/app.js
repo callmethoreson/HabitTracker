@@ -1,50 +1,69 @@
+class HabitTrackerApp{
+
+    habitTable;
+    static instance = null;
+
+    constructor(){
+        if(HabitTrackerApp.instance == null){
+            this.habitTable = new HabitTable();
+            // HabitTrackerApp.instance = this;
+            console.log("App started"); 
+        }
+
+        HabitTrackerApp.instance = Object.freeze(this);
+    }
+
+    static getInstance() {
+        return this.instance || new this();
+    }
+
+    addHabitAction(element){
+        var textInput = document.getElementById('newHabitName');
+        if(textInput.value == ""){
+            alert("Habit must have a valid name!")
+            return;
+        }
+
+        this.habitTable.addHabitFromApp(textInput.value);
+        textInput.value = "";
+    }
+
+    onCheckBoxChange(habitID, state){
+        this.habitTable.onCheckBoxChange(habitID, state);
+    }
+
+    hideHabit(habitID){
+        this.habitTable.hideHabit(habitID);
+    }
+
+    hideSelectedHabits(){
+        this.habitTable.hideSelectedHabits();
+    }
+}
+
+var habitTrackerApp = new HabitTrackerApp();
+
+
 function toggleComplete(cell) {
     cell.classList.toggle('completed');
 }
 
-function buildTable(){
-
-    //create habit objects
-    var exer = new Habit("Exercise")
-
-    var habits = [
-        new Habit("Exercise"),
-        new Habit("Learning"),
-        new Habit("Social"),
-        new Habit("Journal"),
-    ];
-
-    //add habits
-    habits.forEach((habit) => {
-        habit.addHabit();
-    });
-
-}
-
 function addHabitFromButton(element){
-    //get element
-    textInput = document.getElementById('newHabitName');
-
-    if(textInput.value == ""){
-        alert("Habit must have a valid name!")
-        return;
-    }
-
-    habits.add(new Habit(textInput.value));
-
-    habits.last();
-
-    console.log(textInput.value);
-    addHabit(textInput.value);
-    textInput.value = "";
+    var app = HabitTrackerApp.getInstance();
+    app.addHabitAction(element);
 }
 
-function removeHabit(element){
-    console.log(element);
+function checkBoxChange(element){
+    var app = HabitTrackerApp.getInstance();
+    app.onCheckBoxChange(element.getAttribute('data-habit-id'), element.checked);
 }
 
-buildTable();
-console.log("table built");
+function hideHabit(id){
+    var app = HabitTrackerApp.getInstance();
+    app.hideHabit(id);
+}
 
-const habit1 = new Habit("habitInstance");
-addHabit(habit1);
+function hideSelectedItems(){
+    var app = HabitTrackerApp.getInstance();
+    app.hideSelectedHabits();
+}
