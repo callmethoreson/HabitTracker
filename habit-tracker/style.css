@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: fixed;
+}
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+  width: 4%; /* Ensuring equal column width */
+}
+.completed {
+  background-color: lightgreen;
+}
+
+html {
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+h1{
+  padding-bottom: 20;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: whitesmoke;
+}
+
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "menu content"
+    "footer footer";
+  grid-template-columns: 1fr 3fr;
+  gap: 5px;
+  background-color: #2196F3;
+  padding: 5px;
+}
+.container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+}
+.container > div.header {
+  grid-area: header;
+  text-align: center;
+}
+.container > div.menu {
+  grid-area: menu;
+}
+.container > div.content {
+  grid-area: content;
+}
+.container > div.footer {
+  grid-area: footer;
+}
+
+.trackerTable {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: 8px solid #0e3ab3e7;
+  
+}
+
+.gridDisplay {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-columns: 0.6fr 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+  background-color: #0e3ab3e7;
+  padding: 6px;
+}
+.gridDisplay > div {
+  background-color: #c2e4ff;
+  border: 1px solid #0c1adda9;
+  padding: 10px;
+  text-align: center;
+}
+
+.tableHeader {
+  font-size: 30px;
+  font-weight: 400;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.habitText {
+  font-size: 25px;
+  font-style: italic;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.cursor-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: black;
+  position: absolute;
+  pointer-events: none; /* Ensures the circle doesn't interfere with clicks */
+}
+
+.timeInput {
+  width: 80%;
+  height: 80%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 6px;
+  grid-row-gap: 3px;
+}
