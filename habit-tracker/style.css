@@ -108,10 +108,27 @@ body {
 }
 
 .cursor-circle {
-  width: 20px;
-  height: 20px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background-color: black;
+  background-color: rgb(155, 15, 15);
+  background: radial-gradient(circle at 8px 8px, #5cabff, #000);
+  position: absolute;
+  pointer-events: none; /* Ensures the circle doesn't interfere with clicks */
+}
+.cursor-circle1 {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgb(6, 236, 56);
+  position: absolute;
+  pointer-events: none; /* Ensures the circle doesn't interfere with clicks */
+}
+.cursor-circle2 {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(14, 28, 218, 0.562);
   position: absolute;
   pointer-events: none; /* Ensures the circle doesn't interfere with clicks */
 }
