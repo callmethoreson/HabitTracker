@@ -23,7 +23,7 @@ class HabitTable{
 
     addHabitFromApp(habitTextInput){
         //add habit to list
-        var newHabit = new Habit(habitTextInput);
+        let newHabit = new Habit(habitTextInput);
         this.habits.push(newHabit);
         newHabit.addHabit();
     }
@@ -45,7 +45,7 @@ class HabitTable{
     }
 
     getHabitById(habitID){
-        var desHabit = null;
+        let desHabit = null;
 
         this.habits.forEach((habit) => {
             if(habit.id == habitID){

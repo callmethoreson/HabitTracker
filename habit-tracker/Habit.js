@@ -7,7 +7,6 @@ class Habit{
     //post gre docker container
     //sql lite may be another option as well
 
-
     constructor(name) {
         this.id = Habit.currID;
         this.name = name;
@@ -31,13 +30,13 @@ class Habit{
     addHabit(){    
         const tableDiv = document.getElementById('tableDiv');
 
-        var checkbox = document.createElement('input');
+        let checkbox = document.createElement('input');
         checkbox.type = "checkbox";
         checkbox.setAttribute('data-habit-id', this.id);
         checkbox.setAttribute('action', "javascript:;");
         checkbox.setAttribute('onChange', "checkBoxChange(this)");
 
-        var newElement = document.createElement('div');
+        let newElement = document.createElement('div');
         newElement.setAttribute('data-habit-id', this.id);
         newElement.appendChild(checkbox);
         tableDiv.appendChild(newElement);
@@ -50,13 +49,17 @@ class Habit{
         tableDiv.appendChild(newElement);
 
 
-        var numDays = 7;
+        let numDays = 7;
         //add text inputs
-        for(var i = 0; i < numDays; i++){
+        for(let i = 0; i < numDays; i++){
             //create element
             newElement = document.createElement('div');
             newElement.setAttribute('data-habit-id', this.id);
-            newElement.innerHTML = '<div><input type="number" min="0" oninput="toggleComplete()" class = "timeInput" placeholder="# Mins" data-habit = "Exercise"></div>';
+            newElement.setAttribute('data-day', i)
+            newElement.innerHTML = `
+                <div>
+                    <input type="number" min="0" oninput="toggleComplete()" class = "timeInput" placeholder="# Mins" data-habit = "Exercise">
+                </div>`;
             tableDiv.appendChild(newElement);
         }
 
@@ -75,7 +78,7 @@ class Habit{
     hideHabit(){
         console.log(`hiding habit ${this.id}`);
         //get all elements with this id as an attribute
-        var items = document.querySelectorAll(`[data-habit-id="${this.id}"]`);
+        let items = document.querySelectorAll(`[data-habit-id="${this.id}"]`);
         items.forEach( (item) => {
             item.style.display = 'none';
         });
