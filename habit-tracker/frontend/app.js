@@ -1,10 +1,5 @@
 let habitTrackerApp = new HabitTrackerApp();
 
-
-
-
-
-
 function toggleComplete(cell) {
     cell.classList.toggle('completed');
 }

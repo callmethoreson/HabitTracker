@@ -1,0 +1,27 @@
+services:
+  backend:
+    # build: . #location of dockerfile
+    image: node:18
+    working_dir: /app/backend
+    container_name: ht-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app   #bind mount for current folder into container
+    command: /bin/sh -c 'npm install && npm run dev'  #clean install and run
+    depends_on:
+      - db      
+  db:
+    image: postgres:15
+    container_name: ht-postgresdb
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ht-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
