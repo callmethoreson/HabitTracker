@@ -48,7 +48,7 @@ VALUES
 (1,1,'Journal Time',    '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}');
 
 -- //Insert Austin, Week 2
-INSERT INTO habit_table (user_id, date_lookup_id, name, duration_list)
+INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
 VALUES
 (1,2,'Exercise',        '{"Sun":0,"Mon":30,"Tue":0,"Wed":30,"Thu":0,"Fri":30,"Sat":0}'),
 (1,2,'Learning',        '{"Sun":0,"Mon":20,"Tue":20,"Wed":100,"Thu":60,"Fri":0,"Sat":0}'),
@@ -58,7 +58,7 @@ VALUES
 (1,2,'Journal Time',    '{"Sun":0,"Mon":0,"Tue":0,"Wed":15,"Thu":15,"Fri":15,"Sat":0}');
 
 -- //Insert Austin, Week 3
-INSERT INTO habit_table (user_id, date_lookup_id, name, duration_list)
+INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
 VALUES
 (1,3,'Exercise',        '{"Sun":0,"Mon":30,"Tue":0,"Wed":30,"Thu":0,"Fri":0,"Sat":0}'),
 (1,3,'Learning',        '{"Sun":0,"Mon":40,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
@@ -68,7 +68,7 @@ VALUES
 (1,3,'Journal Time',    '{"Sun":0,"Mon":15,"Tue":15,"Wed":15,"Thu":0,"Fri":0,"Sat":0}');
 
 --Insert Austin, Week 4
-INSERT INTO habit_table (user_id, date_lookup_id, name, duration_list)
+INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
 VALUES
 (1,4,'Exercise',        '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
 (1,4,'Learning',        '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
