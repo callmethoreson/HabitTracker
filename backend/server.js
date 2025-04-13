@@ -27,6 +27,8 @@ app.get('/y', async (req, res) => {
     }
 });
 
+console.log("Test2");
+
 // Sample route
 app.get('/habits', async (req, res) => {
   try {
@@ -56,16 +58,6 @@ app.get('/test', async (req, res) => {
         console.log(error);
         res.status(500).send('Error adding user');
     }
-});
-
-app.get('/test', async (req, res) => {
-  try {
-      //const result = await pool.query('SELECT * FROM habit_table');
-      res.json("TESTISGOOD");
-  } catch (error) {
-      console.log(error);
-      res.status(500).send('Error adding user');
-  }
 });
 
 app.listen(3000, () => {
