@@ -41,4 +41,37 @@ class HabitTrackerApp{
     hideSelectedHabits(){
         this.habitTable.hideSelectedHabits();
     }
+
+    async getHabitsByEmail(userEmail){
+        console.log(`email: ${userEmail}`);
+        //email validation is handled by html
+
+        try {
+            const response = await fetch('/api/habits', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: userEmail})
+            })
+        
+            //check to see if response is valid
+            if(response.status == 404){
+                return alert("User not found with that email address");
+            }
+
+            //response is an array
+            const habits = await response.json();
+            this.habitTable.addHabits(habits);
+
+
+
+            // console.log('Habits:', habits);
+            // console.log('First habit:', habits[0]); // if it's an array
+
+        } catch (error) {
+            console.log(`error requesting data: ${error}`)
+        }
+
+    }
 }

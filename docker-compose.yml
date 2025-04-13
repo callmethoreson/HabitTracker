@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     volumes:
       - .:/app   #bind mount for current folder into container
-    command: /bin/sh -c 'npm install && npm run dev && npm run dev2'  #clean install and run
+    command: /bin/sh -c "npm install && npm run dev"  #clean install and run
     depends_on:
       - db      
   db:

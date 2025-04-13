@@ -1,10 +1,10 @@
 class HabitTable{
 
     habits = [
-        new Habit("Exercise"),
-        new Habit("Learning"),
-        new Habit("Social"),
-        new Habit("Journal"),
+        // new Habit("Exercise"),
+        // new Habit("Learning"),
+        // new Habit("Social"),
+        // new Habit("Journal"),
     ];
 
     constructor(){
@@ -55,6 +55,28 @@ class HabitTable{
         });
 
         return desHabit;
+    }
+
+    addHabits(habitArray){
+
+        //clear exisiting state from this object and html page
+        this.reset();
+
+        //for each habit, create a new habit object
+        habitArray.forEach((JSONhabit) => {
+            this.habits.push(new Habit(JSONhabit.name, JSONhabit.duration_list));
+        });
+
+        this.buildTable();
+    }
+
+    reset(){
+        //clear habits table
+        this.habits = [];
+
+        //clear html object
+        const tableDiv = document.getElementById('tableDiv');
+        tableDiv.innerHTML = '';
     }
 
 }

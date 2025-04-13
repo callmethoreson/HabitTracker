@@ -23,3 +23,10 @@ function hideSelectedItems(){
     let app = HabitTrackerApp.getInstance();
     app.hideSelectedHabits();
 }
+
+function getHabitsFromBackend(element){
+    let app = HabitTrackerApp.getInstance();
+    app.getHabitsByEmail(document.getElementById('emailInput').value);
+}
+
+    

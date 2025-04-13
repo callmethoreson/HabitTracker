@@ -7,18 +7,10 @@ class Habit{
     //post gre docker container
     //sql lite may be another option as well
 
-    constructor(name) {
+    constructor(name, durationList) {
         this.id = Habit.currID;
         this.name = name;
-        this.timesList = [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ];
+        this.durationList = Object.values(durationList);
         this.markedForRemoval = false;
         Habit.currID++;
     }
@@ -49,19 +41,26 @@ class Habit{
         tableDiv.appendChild(newElement);
 
 
-        let numDays = 7;
-        //add text inputs
-        for(let i = 0; i < numDays; i++){
+
+        //use for each loop on duration list
+        this.durationList.forEach((entry) => {
+            console.log("entry:", entry);
+
             //create element
             newElement = document.createElement('div');
             newElement.setAttribute('data-habit-id', this.id);
-            newElement.setAttribute('data-day', i)
             newElement.innerHTML = `
-                <div>
-                    <input type="number" min="0" oninput="toggleComplete()" class = "timeInput" placeholder="# Mins" data-habit = "Exercise">
-                </div>`;
+            <div>
+                <input type="number" 
+                min="0" 
+                oninput="toggleComplete()" 
+                class = "timeInput" 
+                data-habit = ${this.name} 
+                placeholder = # mins
+                value = ${entry}>
+            </div>`;
             tableDiv.appendChild(newElement);
-        }
+        });
 
     }
 
@@ -85,13 +84,3 @@ class Habit{
     }
 
 }
-
-const DayIndex = {
-    MONDAY:     0,
-    TUESDAY:    1,
-    WEDNESDAY:  2,
-    THURSDAY:   3,
-    FRIDAY:     4,
-    SATURDAY:   5,
-    SUNDAY:     6
-};
