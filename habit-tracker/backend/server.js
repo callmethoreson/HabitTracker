@@ -14,13 +14,12 @@ const pool = new Pool({
   host: 'db',        // service name from docker-compose
   user: 'dev',
   password: 'password',
-  database: 'devdb',
+  database: 'ht-db',
   port: 5432,
 });
 
 app.get('/y', async (req, res) => {
     try {
-        //const result = await pool.query('SELECT * FROM habit_table');
         res.json("Yup");
     } catch (error) {
         console.log(error);
@@ -31,7 +30,18 @@ app.get('/y', async (req, res) => {
 // Sample route
 app.get('/habits', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM habit_table');
+    const result = await pool.query('SELECT * FROM habits');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error querying database');
+  }
+});
+
+// Sample route
+app.get('/habitsAustin', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM habits WHERE user_id = 1 AND date_lookup_id = 1');
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -41,12 +51,21 @@ app.get('/habits', async (req, res) => {
 
 app.get('/test', async (req, res) => {
     try {
-        //const result = await pool.query('SELECT * FROM habit_table');
         res.json("TESTISGOOD");
     } catch (error) {
         console.log(error);
         res.status(500).send('Error adding user');
     }
+});
+
+app.get('/test', async (req, res) => {
+  try {
+      //const result = await pool.query('SELECT * FROM habit_table');
+      res.json("TESTISGOOD");
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Error adding user');
+  }
 });
 
 app.listen(3000, () => {
