@@ -10,6 +10,11 @@ class HabitTable{
     constructor(){
         //eventually will load stuff from storage?
 
+
+        this.maxDateLookupId = 0;
+        this.dateLookupId = 0;
+        this.userId = 0;
+
         //build out table
         this.buildTable();
     }
@@ -57,7 +62,7 @@ class HabitTable{
         return desHabit;
     }
 
-    addHabits(habitArray){
+    addHabits(habitArray, dates){
 
         //clear exisiting state from this object and html page
         this.reset();
@@ -67,7 +72,15 @@ class HabitTable{
             this.habits.push(new Habit(JSONhabit.name, JSONhabit.duration_list));
         });
 
+        //show date selector
+        document.getElementById("date-selector").style = "display: block"
+        document.getElementById("start-date-text").innerHTML = 
+            new Date(dates.start_date).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+        document.getElementById("end-date-text").innerHTML = 
+            new Date(dates.end_date).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+
         this.buildTable();
+
     }
 
     reset(){
@@ -76,7 +89,17 @@ class HabitTable{
 
         //clear html object
         const tableDiv = document.getElementById('tableDiv');
-        tableDiv.innerHTML = '';
+        tableDiv.innerHTML = `
+            <div></div>
+            <div class = tableHeader>Habit</div>
+            <div class = tableHeader>Sun</div>
+            <div class = tableHeader>Mon</div>
+            <div class = tableHeader>Tue</div>
+            <div class = tableHeader>Wed</div>
+            <div class = tableHeader>Thur</div>
+            <div class = tableHeader>Fri</div>
+            <div class = tableHeader>Sat</div>
+            `;
     }
 
 }
