@@ -70,10 +70,10 @@ VALUES
 --Insert Austin, Week 4
 INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
 VALUES
-(1,4,'Exercise',        '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
-(1,4,'Learning',        '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
-(1,4,'Project',         '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
-(1,4,'Neet Code',       '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
-(1,4,'Social Time',     '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
-(1,4,'Journal Time',    '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}');
+(1,4,'Exercise',        '{"Sun":100,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
+(1,4,'Learning',        '{"Sun":0,"Mon":100,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
+(1,4,'Project',         '{"Sun":0,"Mon":0,"Tue":100,"Wed":0,"Thu":0,"Fri":0,"Sat":0}'),
+(1,4,'Neet Code',       '{"Sun":0,"Mon":0,"Tue":0,"Wed":100,"Thu":0,"Fri":0,"Sat":0}'),
+(1,4,'Social Time',     '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
+(1,4,'Journal Time',    '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":0}');
 
