@@ -44,8 +44,6 @@ class Habit{
 
         //use for each loop on duration list
         this.durationList.forEach((entry) => {
-            console.log("entry:", entry);
-
             //create element
             newElement = document.createElement('div');
             newElement.setAttribute('data-habit-id', this.id);
