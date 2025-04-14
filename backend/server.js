@@ -18,15 +18,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.get('/y', async (req, res) => {
-    try {
-        res.json("Yup");
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error adding user');
-    }
-});
-
 // Sample route
 app.get('/habits', async (req, res) => {
   try {
@@ -36,26 +27,6 @@ app.get('/habits', async (req, res) => {
     console.error(err);
     res.status(500).send('Error querying database');
   }
-});
-
-// Sample route
-app.get('/habitsAustin', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM habits WHERE user_id = 1 AND date_lookup_id = 1');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error querying database');
-  }
-});
-
-app.get('/test', async (req, res) => {
-    try {
-        res.json("TESTISTGOOD");
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error adding user');
-    }
 });
 
 ////////////
@@ -81,26 +52,102 @@ app.post('/api/habits', async (req, res) => {
     }
     
     //getting current date_lookup_id
-    const dateLookupId = await pool.query(
-      'SELECT id FROM date_lookup WHERE start_date < CURRENT_DATE ORDER BY start_date DESC LIMIT 1;'
-    ).then(res => res.rows[0].id);
+    const dateLookup = await pool.query(
+      'SELECT * FROM date_lookup WHERE start_date < CURRENT_DATE ORDER BY start_date DESC LIMIT 1;'
+    ).then(res => res.rows[0]);
 
-    console.log(`date_lookup_id = ${dateLookupId}`);
+    console.log(`date_lookup_id = ${dateLookup.id}`);
 
     const test = await pool.query(
-      `SELECT * FROM habits WHERE user_id = ${userID} and date_lookup_id = ${dateLookupId};`
+      `SELECT * FROM habits WHERE user_id = ${userID} and date_lookup_id = ${dateLookup.id};`
     ).then(res => res.rows);
 
     console.log(`habits list : ${test}`);
     console.log(JSON.stringify(test));
 
-    const result = `userID = ${userID} : date_lookup_id = ${dateLookupId}`
+    const result = `userID = ${userID} : date_lookup_id = ${dateLookup}`
 
-    res.json(test);
+    //define a new object that will compose the datelookup and habit entry
+    const habitPackage = {
+      list: test,
+      dates: dateLookup,
+      dateLookupId: dateLookup.id,
+      userId: userID
+    }
+
+    // res.json(test);
+    res.json(habitPackage);
   } catch (error) {
     console.log(error);
     res.status(500).send('No-user availabe with that email address');
   }
+});
+
+app.get('/api/dateLookup/:id', async (req, res) => {
+  const date_lookup_id = req.params.id;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM date_lookup WHERE id = $1',
+      [date_lookup_id]
+    );
+
+    if(result.rows.length > 0){
+      console.log(result);
+      res.send(result.rows[0]);
+    }else{
+      return res.status(404).send({ message: `ALERT: No date with that id -> ${date_lookup_id}` });
+    }
+
+
+
+  }catch{
+    console.log(error);
+    res.status(500).send('someting went wrong!');
+  }
+
+});
+
+app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
+  const date_lookup_id = req.params.datelookupid;
+  const user_id = req.params.userid;
+
+  //log
+  console.log("userid", user_id);
+  console.log("datelookup", date_lookup_id);
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM habits WHERE user_id = $1 AND date_lookup_id = $2 ',
+      [user_id, date_lookup_id]
+    );
+
+    if(result.rows.length > 0){
+      console.log(result);
+    }else{
+      return res.status(404).send({ message: `ALERT: No date with that id -> ${date_lookup_id}` });
+    }
+
+    //getting current date_lookup_id
+    const dateLookup = await pool.query(
+      'SELECT * FROM date_lookup WHERE id = $1 LIMIT 1',
+      [date_lookup_id]
+    ).then(res => res.rows[0]);
+
+    const habitPackage = {
+      list: result.rows,
+      dates: dateLookup,
+      dateLookupId: dateLookup.id,
+      userId: user_id
+    }
+
+
+    res.json(habitPackage);
+  }catch(error){
+    console.log(error);
+    res.status(500).send('someting went wrong!');
+  }
+
 });
 
 
