@@ -148,3 +148,23 @@ body {
   grid-column-gap: 6px;
   grid-row-gap: 3px;
 }
+
+.date-selector{
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 1rem; 
+  font-size: 1.5rem;
+}
+
+.button {
+  border: none;
+  color: rgb(175, 8, 8);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}

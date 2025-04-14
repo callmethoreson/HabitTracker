@@ -29,4 +29,16 @@ function getHabitsFromBackend(element){
     app.getHabitsByEmail(document.getElementById('emailInput').value);
 }
 
+function dateSelectorDecrement(){
+    console.log("decrement");
+    let app = HabitTrackerApp.getInstance();
+    app.decrementHabits();
+}
+
+function dateSelectorIncrement(){
+    console.log("increment");
+    let app = HabitTrackerApp.getInstance();
+    app.incrementHabits();
+}
+
     
