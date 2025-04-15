@@ -24,21 +24,19 @@ function hideSelectedItems(){
     app.hideSelectedHabits();
 }
 
-function getHabitsFromBackend(element){
-    let app = HabitTrackerApp.getInstance();
-    app.getHabitsByEmail(document.getElementById('emailInput').value);
-}
+//Setup event listeners
+document.getElementById("emailForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    //define email
+    console.log("email submitted");
+    const email = document.getElementById("emailInput").value;
+    HabitTrackerApp.getInstance().getIntialHabits(email);
+});
 
-function dateSelectorDecrement(){
-    console.log("decrement");
-    let app = HabitTrackerApp.getInstance();
-    app.decrementHabits();
-}
+document.getElementById("left-arrow").addEventListener("click", () => {
+    HabitTrackerApp.getInstance().decrementHabits();
+});
 
-function dateSelectorIncrement(){
-    console.log("increment");
-    let app = HabitTrackerApp.getInstance();
-    app.incrementHabits();
-}
-
-    
+document.getElementById("right-arrow").addEventListener("click", () => {
+    HabitTrackerApp.getInstance().incrementHabits();
+});
