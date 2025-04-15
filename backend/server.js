@@ -69,7 +69,7 @@ app.post('/api/habits', async (req, res) => {
 
     //define a new object that will compose the datelookup and habit entry
     const habitPackage = {
-      list: test,
+      habits: test,
       dates: dateLookup,
       dateLookupId: dateLookup.id,
       userId: userID
@@ -135,7 +135,7 @@ app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
     ).then(res => res.rows[0]);
 
     const habitPackage = {
-      list: result.rows,
+      habits: result.rows,
       dates: dateLookup,
       dateLookupId: dateLookup.id,
       userId: user_id
