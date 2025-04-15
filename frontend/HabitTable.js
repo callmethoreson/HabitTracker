@@ -1,11 +1,6 @@
 class HabitTable{
 
-    habits = [
-        // new Habit("Exercise"),
-        // new Habit("Learning"),
-        // new Habit("Social"),
-        // new Habit("Journal"),
-    ];
+    habits = [];
 
     constructor(){
         //eventually will load stuff from storage?

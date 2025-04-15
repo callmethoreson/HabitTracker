@@ -1,6 +1,11 @@
 class HabitTrackerApp{
 
     habitTable;
+
+    api = new ApiService();
+
+
+
     static #instance = null;
 
     constructor(){
@@ -10,9 +15,13 @@ class HabitTrackerApp{
             console.log("App started"); 
         }
 
+        this.maxDateLookupId = 0;
+        this.dateLookupId = 0;
+        this.userId = 0;
 
         //TODO, should maybe add an extra class to hande api calls
-        HabitTrackerApp.#instance = Object.freeze(this);
+        // HabitTrackerApp.#instance = Object.freeze(this);
+        HabitTrackerApp.#instance = this;
     }
 
     static getInstance() {
@@ -44,51 +53,32 @@ class HabitTrackerApp{
         this.habitTable.hideSelectedHabits();
     }
 
-    async getHabitsByEmail(userEmail){
-        console.log(`email: ${userEmail}`);
-        //email validation is handled by html
+    async getIntialHabits(userEmail){
+        const res = await this.api.getHabitsByEmail(userEmail);
 
-        try {
-            const response = await fetch('/api/habits', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({email: userEmail})
-            })
-        
-            //check to see if response is valid
-            if(response.status == 404){
-                return alert("User not found with that email address");
-            }
-
-            const res = await response.json();
-
-            console.log("initial response: ", res)
-
-            //response is an array
-            const habits = res.list;
-            const dates = res.dates;
-            this.habitTable.dateLookupId = res.dateLookupId;
-            this.habitTable.maxDateLookupId = this.habitTable.dateLookupId;
-            this.habitTable.userId = res.userId;
-
-            console.log("habits", habits);
-            console.log("dates", dates);
-            console.log("user id", this.habitTable.userId);
-            console.log("date lookup", this.habitTable.dateLookupId);
-
-            //should also update dates of the table...
-            this.habitTable.addHabits(habits, dates);
-
-        } catch (error) {
-            console.log(`error requesting data: ${error}`)
+        if(res === undefined){
+            return;
         }
 
+        //hide email form
+        document.getElementById("emailForm").style = "display: none";
+        //show habit table
+        document.getElementById("trackerTable").style = "display: block";
+
+        this.maxDateLookupId = res.dateLookupId;
+        this.updateFromBackendResponse(res);
     }
 
-    updateAppState(state){
-        
+    updateFromBackendResponse(res){
+        console.log("Response", res);
+
+        this.habitTable.addHabits(res.habits, res.dates);
+        this.dateLookupId = res.dateLookupId;
+        this.userId = res.userId;
+
+        console.log("user id", this.userId);
+        console.log("date lookup", this.dateLookupId);
+        console.log("max lookup", this.maxDateLookupId);
     }
 
     //Need to setup another route that will give the backend email and id
@@ -99,101 +89,32 @@ class HabitTrackerApp{
     
     //checking can be done based on not being able to have habits in the future or less than 0
     async decrementHabits(){
-        if(this.habitTable.dateLookupId === 1){
+        if(this.dateLookupId <= 1){
             alert("This is the begining of time tied to this account");
             return;
         }
 
-        this.habitTable.dateLookupId--;
-
         try {
-
-            console.log("user id", this.habitTable.userId);
-            console.log("date lookup", this.habitTable.dateLookupId);
-
-            const response = await fetch(`/api/habits/${this.habitTable.userId}/${this.habitTable.dateLookupId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-        
-            //check to see if response is valid
-            if(response.status == 404){
-                return alert("Oops, something when wrong :(");
-            }
-
-            const res = await response.json();
-
-            //response is an array
-            const habits = res.list;
-            const dates = res.dates;
-            this.habitTable.dateLookupId = res.dateLookupId;
-
-            console.log("habits (decremented)", habits);
-            console.log("dates (decremented)", dates);
-
-            //should also update dates of the table...
-
-            this.habitTable.addHabits(habits, dates);
-
-
-
-            // console.log('Habits:', habits);
-            // console.log('First habit:', habits[0]); // if it's an array
-
+            let res = await this.api.getHabitsByUserAndDate(this.userId, this.dateLookupId - 1);
+            this.updateFromBackendResponse(res);
         }catch(error){
-            console.log(`error requesting data from decrement: ${error}`)
-            this.habitTable.dateLookupId++;
+            console.log(`error requesting data from increment: ${error}`)
         }
 
     }
 
     async incrementHabits(){
-        if(this.habitTable.dateLookupId === this.habitTable.maxDateLookupId){
+        if(this.dateLookupId >= this.maxDateLookupId){
             alert("Relax buddy, you can't track the future...");
             return;
         }
 
-        this.habitTable.dateLookupId++;
-
-
         try {
-
-            console.log("user id", this.habitTable.userId);
-            console.log("date lookup", this.habitTable.dateLookupId);
-
-            const response = await fetch(`/api/habits/${this.habitTable.userId}/${this.habitTable.dateLookupId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-        
-            //check to see if response is valid
-            if(response.status == 404){
-                return alert("Oops, something when wrong :(");
-            }
-
-            const res = await response.json();
-
-            //response is an array
-            const habits = res.list;
-            const dates = res.dates;
-            this.habitTable.dateLookupId = res.dateLookupId;
-
-            console.log("habits (decremented)", habits);
-            console.log("dates (decremented)", dates);
-
-            //should also update dates of the table...
-
-            this.habitTable.addHabits(habits, dates);
-
+            let res = await this.api.getHabitsByUserAndDate(this.userId, this.dateLookupId + 1);
+            this.updateFromBackendResponse(res);
         }catch(error){
-            console.log(`error requesting data from decrement: ${error}`)
-            this.habitTable.dateLookupId--;
+            console.log(`error requesting data from increment: ${error}`)
         }
-
 
     }
 }
