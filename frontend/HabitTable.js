@@ -3,13 +3,6 @@ class HabitTable{
     habits = [];
 
     constructor(){
-        //eventually will load stuff from storage?
-
-
-        this.maxDateLookupId = 0;
-        this.dateLookupId = 0;
-        this.userId = 0;
-
         //build out table
         this.buildTable();
     }
@@ -64,7 +57,7 @@ class HabitTable{
 
         //for each habit, create a new habit object
         habitArray.forEach((JSONhabit) => {
-            this.habits.push(new Habit(JSONhabit.name, JSONhabit.duration_list));
+            this.habits.push(new Habit(JSONhabit.id, JSONhabit.name, JSONhabit.duration_list));
         });
 
         //show date selector
@@ -84,6 +77,8 @@ class HabitTable{
 
         //clear html object
         const tableDiv = document.getElementById('tableDiv');
+
+        //add headers back
         tableDiv.innerHTML = `
             <div></div>
             <div class = tableHeader>Habit</div>
@@ -95,6 +90,16 @@ class HabitTable{
             <div class = tableHeader>Fri</div>
             <div class = tableHeader>Sat</div>
             `;
+    }
+
+    getHabits(userId, dateLookupId){
+        var resHabits = []; 
+        
+        this.habits.forEach((habit) => {
+            resHabits.push(habit.toJson(userId, dateLookupId));
+        })
+
+        return resHabits;
     }
 
 }

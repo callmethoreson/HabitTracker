@@ -40,3 +40,7 @@ document.getElementById("left-arrow").addEventListener("click", () => {
 document.getElementById("right-arrow").addEventListener("click", () => {
     HabitTrackerApp.getInstance().incrementHabits();
 });
+
+document.getElementById("save-button").addEventListener("click", () => {
+    HabitTrackerApp.getInstance().updateHabits();
+})

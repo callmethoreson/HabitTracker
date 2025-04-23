@@ -7,12 +7,11 @@ class Habit{
     //post gre docker container
     //sql lite may be another option as well
 
-    constructor(name, durationList) {
-        this.id = Habit.currID;
+    constructor(id, name, durationList) {
+        this.id = id;
         this.name = name;
         this.durationList = Object.values(durationList);
         this.markedForRemoval = false;
-        Habit.currID++;
     }
 
     getName() {
@@ -33,17 +32,15 @@ class Habit{
         newElement.appendChild(checkbox);
         tableDiv.appendChild(newElement);
 
-    
         //create and add habit name div
         newElement = document.createElement('div');
         newElement.setAttribute('data-habit-id', this.id);
         newElement.innerHTML = `<div class = habitText>${this.name}</div>`;
         tableDiv.appendChild(newElement);
 
-
-
         //use for each loop on duration list
-        this.durationList.forEach((entry) => {
+        //todo add listener that will update
+        this.durationList.forEach((entry, i) => {
             //create element
             newElement = document.createElement('div');
             newElement.setAttribute('data-habit-id', this.id);
@@ -57,9 +54,17 @@ class Habit{
                 placeholder = # mins
                 value = ${entry}>
             </div>`;
+            newElement.addEventListener("change", (e) => this.updateDurationList(i, e));
             tableDiv.appendChild(newElement);
         });
 
+    }
+
+    updateDurationList(index, event){
+        //mark the current habit as dirty?
+        const value = parseInt(event.target.value) || 0;
+        this.durationList[index] = value;
+        console.log(`Updated habit ${this.name} (${index}) to ${value} mins`);
     }
 
     updateCheckboxState(state){
@@ -79,6 +84,26 @@ class Habit{
         items.forEach( (item) => {
             item.style.display = 'none';
         });
+    }
+
+    toJson(userId, dateLookupId){
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const durationObj = {};
+
+        //build duration list
+        days.forEach((day, i) => {
+            durationObj[day] = this.durationList[i] || 0;
+        })
+
+        //return properly formatted habit object
+        return {
+            id: this.id,
+            name: this.name,
+            user_id: userId,
+            date_lookup_id: dateLookupId,
+            duration_list: durationObj
+        };
+
     }
 
 }

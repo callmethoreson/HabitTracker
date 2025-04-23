@@ -1,10 +1,7 @@
 class HabitTrackerApp{
 
     habitTable;
-
     api = new ApiService();
-
-
 
     static #instance = null;
 
@@ -19,8 +16,6 @@ class HabitTrackerApp{
         this.dateLookupId = 0;
         this.userId = 0;
 
-        //TODO, should maybe add an extra class to hande api calls
-        // HabitTrackerApp.#instance = Object.freeze(this);
         HabitTrackerApp.#instance = this;
     }
 
@@ -73,8 +68,12 @@ class HabitTrackerApp{
         console.log("Response", res);
 
         this.habitTable.addHabits(res.habits, res.dates);
+        this.habitTable.dateLookupId = res.dateLookupId;
+        this.habitTable.userId = res.userId;
+
         this.dateLookupId = res.dateLookupId;
         this.userId = res.userId;
+
 
         console.log("user id", this.userId);
         console.log("date lookup", this.dateLookupId);
@@ -100,7 +99,6 @@ class HabitTrackerApp{
         }catch(error){
             console.log(`error requesting data from increment: ${error}`)
         }
-
     }
 
     async incrementHabits(){
@@ -115,6 +113,22 @@ class HabitTrackerApp{
         }catch(error){
             console.log(`error requesting data from increment: ${error}`)
         }
+    }
+
+    //Send out response to update habits for the current week and user
+    //This may eventually want to live somewhere else, may be done automatically
+    //When incrementing or decrementing to a different week
+    //Also, those functions could probaby be combined.
+    async updateHabits(){
+        let habits = this.habitTable.getHabits(this.userId, this.dateLookupId);
+
+        try {
+            let res = await this.api.postHabitPackage(habits, this.userId, this.dateLookupId);
+            // this.updateFromBackendResponse(res);
+        }catch(error){
+            console.log(`error updating habits: ${error}`)
+        }
 
     }
+
 }
