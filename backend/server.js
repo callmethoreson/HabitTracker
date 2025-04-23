@@ -62,8 +62,8 @@ app.post('/api/habits', async (req, res) => {
       `SELECT * FROM habits WHERE user_id = ${userID} and date_lookup_id = ${dateLookup.id};`
     ).then(res => res.rows);
 
-    console.log(`habits list : ${test}`);
-    console.log(JSON.stringify(test));
+    // console.log(`habits list : ${test}`);
+    // console.log(JSON.stringify(test));
 
     const result = `userID = ${userID} : date_lookup_id = ${dateLookup}`
 
@@ -123,7 +123,7 @@ app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
     );
 
     if(result.rows.length > 0){
-      console.log(result);
+      //console.log(result);
     }else{
       return res.status(404).send({ message: `ALERT: No date with that id -> ${date_lookup_id}` });
     }
@@ -147,6 +147,41 @@ app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
     console.log(error);
     res.status(500).send('someting went wrong!');
   }
+
+});
+
+app.put(`/api/habits/:userid/:datelookupid`, async (req, res) => {
+  const date_lookup_id = req.params.datelookupid;
+  const user_id = req.params.userid;
+  const habits = req.body;
+
+  //console.log("in put", habits);
+
+  try {
+
+    for(const habit of habits){
+      const result = await pool.query(
+        `UPDATE habits 
+         SET duration_list = $1
+         WHERE id = $2`,
+        [habit.duration_list, habit.id]
+      );
+
+      if (result.rowCount === 0) {
+        // No habit was updated — maybe wrong ID?
+        return res.status(404).json({ success: false, message: 'Habit not found.' });
+      }else{
+        console.log(`Habit id: ${habit.id} updated!`);
+      }
+
+    };
+
+    res.json("success");
+  }catch(error){
+    console.log(error);
+    res.status(500).send('someting went wrong!');
+  }
+
 
 });
 
