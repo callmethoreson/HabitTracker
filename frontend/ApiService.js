@@ -36,7 +36,7 @@ class ApiService{
                 },
             })
         
-            if(response.status == 404){
+            if(response.status != 200){
                 return alert("Oops, something when wrong :(");
             }
 
@@ -45,6 +45,34 @@ class ApiService{
             console.log(`error requesting data by user and date lookup: ${e}`)
             return null;
         }
+
+    }
+
+
+    async postHabitPackage(habits, userId, dateLookupId){
+
+        console.log("in postHabitPackage: ", habits);
+        console.log(userId, dateLookupId);
+
+        try {
+            const response = await fetch(`/api/habits/${userId}/${dateLookupId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(habits)
+            })
+    
+            if(response.status == 404){
+                return alert("Oops, something when wrong :(");
+            }
+            
+        } catch (error) {
+            console.log(`error posting habit package: ${error}`)
+            return null;
+        }
+
+
 
     }
 }
