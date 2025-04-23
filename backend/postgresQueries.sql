@@ -77,3 +77,27 @@ VALUES
 (1,4,'Social Time',     '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
 (1,4,'Journal Time',    '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":0}');
 
+--Insert Austin, Week 5
+INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
+VALUES
+(1,5,'Exercise',        '{"Sun":100,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":100}'),
+(1,5,'Learning',        '{"Sun":0,"Mon":100,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
+(1,5,'Project',         '{"Sun":300,"Mon":0,"Tue":100,"Wed":100,"Thu":0,"Fri":0,"Sat":0}'),
+(1,5,'Neet Code',       '{"Sun":0,"Mon":0,"Tue":100,"Wed":100,"Thu":0,"Fri":0,"Sat":0}'),
+(1,5,'Social Time',     '{"Sun":0,"Mon":100,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
+(1,5,'Journal Time',    '{"Sun":100,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":0}');
+
+--Insert Austin, Week 6
+INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
+VALUES
+(1,6,'Exercise',        '{"Sun":100,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":100}'),
+(1,6,'Learning',        '{"Sun":0,"Mon":100,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
+(1,6,'Project',         '{"Sun":800,"Mon":800,"Tue":100,"Wed":100,"Thu":800,"Fri":800,"Sat":800}'),
+(1,6,'Neet Code',       '{"Sun":0,"Mon":0,"Tue":100,"Wed":100,"Thu":0,"Fri":0,"Sat":0}'),
+(1,6,'Social Time',     '{"Sun":0,"Mon":100,"Tue":0,"Wed":0,"Thu":100,"Fri":0,"Sat":0}'),
+(1,6,'Journal Time',    '{"Sun":100,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":100,"Sat":0}');
+
+--Updating an existing habit
+UPDATE habits 
+SET duration_list = '{"Sun":100,"Mon":10,"Tue":10,"Wed":10,"Thu":10,"Fri":100,"Sat":10}'
+WHERE id = 44;
