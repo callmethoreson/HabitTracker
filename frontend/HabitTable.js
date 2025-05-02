@@ -109,4 +109,16 @@ class HabitTable{
         return tempHabits;
     }
 
+    getChangedHabits(userId, dateLookupId){
+        let tempHabits = [];
+
+        this.habits.forEach((habit) => {
+            if(habit.markedForUpdate == true){
+                tempHabits.push(habit.toJson(userId, dateLookupId));
+            }
+        });
+
+        return tempHabits;
+    }
+
 }
