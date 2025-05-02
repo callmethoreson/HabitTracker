@@ -18,17 +18,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Sample route
-app.get('/habits', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM habits');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error querying database');
-  }
-});
-
 ////////////
 //request for habits given an email address in the body
 //if request has no other information, assume current date, and go from there
@@ -45,7 +34,7 @@ app.post('/api/habits', async (req, res) => {
     ).then(res => res.rows.length > 0 ? res.rows[0].id : false);
 
     if(userID){
-      console.log(`userID = ${userID}`);
+      // console.log(`userID = ${userID}`);
     }else{
       console.log(`ALERT: User not defined with email -> ${email}`);
       return res.status(404).send({ message: `ALERT: User not defined with email -> ${email}` });
@@ -56,7 +45,7 @@ app.post('/api/habits', async (req, res) => {
       'SELECT * FROM date_lookup WHERE start_date < CURRENT_DATE ORDER BY start_date DESC LIMIT 1;'
     ).then(res => res.rows[0]);
 
-    console.log(`date_lookup_id = ${dateLookup.id}`);
+    // console.log(`date_lookup_id = ${dateLookup.id}`);
 
     const test = await pool.query(
       `SELECT * FROM habits WHERE user_id = ${userID} and date_lookup_id = ${dateLookup.id};`
@@ -83,31 +72,7 @@ app.post('/api/habits', async (req, res) => {
   }
 });
 
-app.get('/api/dateLookup/:id', async (req, res) => {
-  const date_lookup_id = req.params.id;
-
-  try {
-    const result = await pool.query(
-      'SELECT * FROM date_lookup WHERE id = $1',
-      [date_lookup_id]
-    );
-
-    if(result.rows.length > 0){
-      console.log(result);
-      res.send(result.rows[0]);
-    }else{
-      return res.status(404).send({ message: `ALERT: No date with that id -> ${date_lookup_id}` });
-    }
-
-
-
-  }catch{
-    console.log(error);
-    res.status(500).send('someting went wrong!');
-  }
-
-});
-
+//Get habits for some week that are not the current week
 app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
   const date_lookup_id = req.params.datelookupid;
   const user_id = req.params.userid;
@@ -150,12 +115,11 @@ app.get('/api/habits/:userid/:datelookupid', async (req, res) => {
 
 });
 
+//Update habits for a given week and user
 app.put(`/api/habits/:userid/:datelookupid`, async (req, res) => {
   const date_lookup_id = req.params.datelookupid;
   const user_id = req.params.userid;
   const habits = req.body;
-
-  //console.log("in put", habits);
 
   try {
 
@@ -185,6 +149,73 @@ app.put(`/api/habits/:userid/:datelookupid`, async (req, res) => {
 
 });
 
+app.post(`/api/habit/:userid/:datelookupid`, async (req, res) => {
+  const date_lookup_id = req.params.datelookupid;
+  const user_id = req.params.userid;
+  console.log("date lookup:", date_lookup_id, "user id:", user_id);
+  const habit_name = req.body.habitName;
+
+  try {
+
+    const result = await pool.query(
+      `INSERT INTO habits (user_id, date_lookup_id, name, duration_list)
+      VALUES
+      ($1, $2, $3, '{"Sun":0,"Mon":0,"Tue":0,"Wed":0,"Thu":0,"Fri":0,"Sat":0}')
+      `,
+      [user_id, date_lookup_id, habit_name]
+    );
+
+    console.log(result);
+
+    if (result.rowCount === 0) {
+      // No habit was updated — maybe wrong ID?
+      return res.status(404).json({ success: false, message: 'Habit not found.' });
+    }else{
+      console.log(`Habit created!`);
+    }
+
+  
+
+    res.json("success");
+  }catch(error){
+    console.log(error);
+    res.status(500).send('someting went wrong!');
+  }
+
+
+});
+
+//remove habits from list
+app.delete(`/api/habits/:userid/:datelookupid`, async (req, res) => {
+  const date_lookup_id = req.params.datelookupid;
+  const user_id = req.params.userid;
+  const habits = req.body;
+
+  try {
+
+    for(const habit of habits){
+      const result = await pool.query(
+        `DELETE FROM habits 
+         WHERE id = $1`,
+        [habit.id]
+      );
+
+      if (result.rowCount === 0) {
+        // No habit was updated — maybe wrong ID?
+        return res.status(404).json({ success: false, message: 'Habit not found.' });
+      }else{
+        console.log(`Habit id: ${habit.id} updated!`);
+      }
+
+    };
+
+    res.json("success");
+  }catch(error){
+    console.log(error);
+    res.status(500).send('someting went wrong!');
+  }
+
+});
 
 app.listen(3000, () => {
   console.log('Backend running on http://localhost:3000');

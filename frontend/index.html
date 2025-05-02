@@ -35,29 +35,24 @@
         <button id="right-arrow">&#8594;</button>
         <br>
         <!-- <button id="save-button">&#12869;</button> -->
-        <button type="save" id="save-button" value="Update Habits">Update Habits</button>
+        <button type="button" id="save-button" value="Update Habits">Update Habit(s)</button>
+        <button type="button" id="delete-button" value="Remove Habits">Remove Selected Habit(s)</button>
 
     </div>
 
 
     <div id="new-habit" style = "display: none">
         <br>
-            <h1>New Habit</h1>
+            <h3>New Habit</h3>
         <br>
 
         <div>
-            <form action="javascript:;" onsubmit=" addHabitFromButton() ">
-                <!-- <label for="habit">New Habit :</label> -->
-                <input type="text" id="newHabitName" value=""><br><br>
-                <input type="submit" value=" Add Habit ">
+            <form action="javascript:;" id= "new-habit-form">
+                <input type="text" id="newHabitName"><br><br>
+                <input type="submit" value=" Add Habit " id= "new-habit-button">
             </form>
         </div>
-        <br>
-        <div>
-            <form action="javascript:;" onsubmit=" hideSelectedItems() ">
-                <input type="submit" value=" Remove Habit(s) ">
-            </form>
-        </div>
+        
     </div>
 
     <div style = "display: none">

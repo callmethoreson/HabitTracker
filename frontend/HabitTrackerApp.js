@@ -36,6 +36,33 @@ class HabitTrackerApp{
         textInput.value = "";
     }
 
+    async addHabit(){
+        let textInput = document.getElementById('newHabitName');
+
+        //TODO, more input validation, regex maybe?
+        if(textInput.value == ""){
+            alert("Habit must have a valid name!")
+            return;
+        }
+
+        //rethink how this will work
+
+        //we should send a request to the backend
+        //if successful, we should reload the frontend
+        //if it fails, alert the user that something when wrong
+        //habit table shouldn't need to handle this
+
+        //need new function in api service, should take in similar info to other api calls
+        //userId, dateLookupId
+        this.api.addHabitByName(textInput.value, this.userId, this.dateLookupId);
+
+        //TODO, refresh page automagically
+        this.refreshHabits();
+
+        //this.habitTable.addHabitFromApp(textInput.value);
+        textInput.value = "";
+    }
+
     onCheckBoxChange(habitID, state){
         this.habitTable.onCheckBoxChange(habitID, state);
     }
@@ -44,8 +71,18 @@ class HabitTrackerApp{
         this.habitTable.hideHabit(habitID);
     }
 
-    hideSelectedHabits(){
-        this.habitTable.hideSelectedHabits();
+    async removeSelectedHabits(){
+        //build out list as json package, similar to post
+        let habits = this.habitTable.getSelectedHabits(this.userId, this.dateLookupId);
+
+        try {
+            let res = await this.api.deleteHabitPackage(habits, this.userId, this.dateLookupId);
+        }catch(error){
+            console.log(`error updating habits: ${error}`)
+        }
+
+        this.refreshHabits();
+
     }
 
     async getIntialHabits(userEmail){
@@ -73,7 +110,6 @@ class HabitTrackerApp{
 
         this.dateLookupId = res.dateLookupId;
         this.userId = res.userId;
-
 
         console.log("user id", this.userId);
         console.log("date lookup", this.dateLookupId);
@@ -127,6 +163,18 @@ class HabitTrackerApp{
             // this.updateFromBackendResponse(res);
         }catch(error){
             console.log(`error updating habits: ${error}`)
+        }
+
+        this.refreshHabits();
+
+    }
+
+    async refreshHabits(){
+        try {
+            let res = await this.api.getHabitsByUserAndDate(this.userId, this.dateLookupId);
+            this.updateFromBackendResponse(res);
+        }catch(error){
+            console.log(`error requesting data from increment: ${error}`)
         }
 
     }

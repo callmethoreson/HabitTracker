@@ -14,13 +14,6 @@ class HabitTable{
         });
     }
 
-    addHabitFromApp(habitTextInput){
-        //add habit to list
-        let newHabit = new Habit(habitTextInput);
-        this.habits.push(newHabit);
-        newHabit.addHabit();
-    }
-
     onCheckBoxChange(habitID, state){
         this.getHabitById(habitID).updateCheckboxState(state);
     }
@@ -62,6 +55,8 @@ class HabitTable{
 
         //show date selector
         document.getElementById("date-selector").style = "display: block"
+        //show add habit block
+        document.getElementById("new-habit").style = "display: block";
         document.getElementById("start-date-text").innerHTML = 
             new Date(dates.start_date).toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
         document.getElementById("end-date-text").innerHTML = 
@@ -100,6 +95,18 @@ class HabitTable{
         })
 
         return resHabits;
+    }
+
+    getSelectedHabits(userId, dateLookupId){
+        let tempHabits = [];
+
+        this.habits.forEach((habit) => {
+            if(habit.markedForRemoval == true){
+                tempHabits.push(habit.toJson(userId, dateLookupId));
+            }
+        });
+
+        return tempHabits;
     }
 
 }

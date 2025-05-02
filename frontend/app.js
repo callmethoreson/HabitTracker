@@ -14,15 +14,15 @@ function checkBoxChange(element){
     app.onCheckBoxChange(element.getAttribute('data-habit-id'), element.checked);
 }
 
-function hideHabit(id){
-    let app = HabitTrackerApp.getInstance();
-    app.hideHabit(id);
-}
+// function hideHabit(id){
+//     let app = HabitTrackerApp.getInstance();
+//     app.hideHabit(id);
+// }
 
-function hideSelectedItems(){
-    let app = HabitTrackerApp.getInstance();
-    app.hideSelectedHabits();
-}
+// function hideSelectedItems(){
+//     let app = HabitTrackerApp.getInstance();
+//     app.hideSelectedHabits();
+// }
 
 //Setup event listeners
 document.getElementById("emailForm").addEventListener("submit", (e) => {
@@ -43,4 +43,14 @@ document.getElementById("right-arrow").addEventListener("click", () => {
 
 document.getElementById("save-button").addEventListener("click", () => {
     HabitTrackerApp.getInstance().updateHabits();
-})
+});
+
+//add new habit with button
+document.getElementById("new-habit-button").addEventListener("click", () => {
+    HabitTrackerApp.getInstance().addHabit();
+});
+
+document.getElementById("delete-button").addEventListener("click", () => {
+    HabitTrackerApp.getInstance().removeSelectedHabits();
+});
+

@@ -72,7 +72,57 @@ class ApiService{
             return null;
         }
 
+    }
 
+    async deleteHabitPackage(habits, userId, dateLookupId){
+
+        console.log("in deleteHabitPackage: ", habits);
+        console.log(userId, dateLookupId);
+
+        try {
+            const response = await fetch(`/api/habits/${userId}/${dateLookupId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(habits)
+            })
+    
+            if(response.status == 404){
+                return alert("Oops, something when wrong :(");
+            }
+            
+        } catch (error) {
+            console.log(`error posting habit package: ${error}`)
+            return null;
+        }
 
     }
+
+    async addHabitByName(habitName, userId, dateLookupId){
+
+        console.log("habit name", habitName);
+
+        try {
+
+            const response = await fetch(`/api/habit/${userId}/${dateLookupId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({habitName})
+            })
+        
+            if(response.status != 200){
+                return alert("Oops, something went wrong, Please try again");
+            }
+
+            return await response.json();
+        }catch(e){
+            console.log(`error adding habit for this user: ${e}`)
+            return null;
+        }
+
+    }
+
 }
