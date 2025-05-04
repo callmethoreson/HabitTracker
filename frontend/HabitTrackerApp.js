@@ -23,17 +23,20 @@ class HabitTrackerApp{
         return this.#instance || new this();
     }
 
-    addHabitAction(element){
-        let textInput = document.getElementById('newHabitName');
+    periodic(){
+        console.log("periodic loop running!");
 
-        //TODO, more input validation, regex maybe?
-        if(textInput.value == ""){
-            alert("Habit must have a valid name!")
-            return;
+        let habits = this.habitTable.getChangedHabits(this.userId, this.dateLookupId);
+
+        if(habits.length !== 0){
+            this.updateHabits(habits);
+        }else{
+            console.log("no habits to update!");
         }
 
-        this.habitTable.addHabitFromApp(textInput.value);
-        textInput.value = "";
+        //use habit table to check for updates
+        //use api to send a fresh habit package
+
     }
 
     async addHabit(){
@@ -45,42 +48,15 @@ class HabitTrackerApp{
             return;
         }
 
-        //rethink how this will work
-
-        //we should send a request to the backend
-        //if successful, we should reload the frontend
-        //if it fails, alert the user that something when wrong
-        //habit table shouldn't need to handle this
-
-        //need new function in api service, should take in similar info to other api calls
-        //userId, dateLookupId
         this.api.addHabitByName(textInput.value, this.userId, this.dateLookupId);
-
-        //TODO, refresh page automagically
         this.refreshHabits();
-
-        //this.habitTable.addHabitFromApp(textInput.value);
         textInput.value = "";
-    }
-
-    onCheckBoxChange(habitID, state){
-        this.habitTable.onCheckBoxChange(habitID, state);
-    }
-
-    hideHabit(habitID){
-        this.habitTable.hideHabit(habitID);
     }
 
     async removeSelectedHabits(){
         //build out list as json package, similar to post
         let habits = this.habitTable.getSelectedHabits(this.userId, this.dateLookupId);
-
-        try {
-            let res = await this.api.deleteHabitPackage(habits, this.userId, this.dateLookupId);
-        }catch(error){
-            console.log(`error updating habits: ${error}`)
-        }
-
+        await this.api.deleteHabitPackage(habits, this.userId, this.dateLookupId);
         this.refreshHabits();
 
     }
@@ -116,13 +92,9 @@ class HabitTrackerApp{
         console.log("max lookup", this.maxDateLookupId);
     }
 
-    //Need to setup another route that will give the backend email and id
-    //probably use a post and go from there
 
     //Things to note, at this point in the app we know the user id and the current date lookup id
     //We should be able to make the request with this information for a more straightforward query
-    
-    //checking can be done based on not being able to have habits in the future or less than 0
     async decrementHabits(){
         if(this.dateLookupId <= 1){
             alert("This is the begining of time tied to this account");
@@ -152,21 +124,17 @@ class HabitTrackerApp{
     }
 
     //Send out response to update habits for the current week and user
-    //This may eventually want to live somewhere else, may be done automatically
-    //When incrementing or decrementing to a different week
-    //Also, those functions could probaby be combined.
-    async updateHabits(){
+    async updateHabits(habitList){
         let habits = this.habitTable.getHabits(this.userId, this.dateLookupId);
 
-        try {
-            let res = await this.api.postHabitPackage(habits, this.userId, this.dateLookupId);
-            // this.updateFromBackendResponse(res);
-        }catch(error){
-            console.log(`error updating habits: ${error}`)
+        //if no habits, send full list
+        if(habitList){ //if its empty
+            //let habits = this.habitTable.getHabits(this.userId, this.dateLookupId);
+            habits = habitList;
         }
 
+        await this.api.postHabitPackage(habits, this.userId, this.dateLookupId);
         this.refreshHabits();
-
     }
 
     async refreshHabits(){

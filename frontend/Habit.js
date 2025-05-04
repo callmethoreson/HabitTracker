@@ -1,21 +1,11 @@
 class Habit{
 
-    static currID = 0;
-
-    //local storage for persistance potentiall
-    //database 
-    //post gre docker container
-    //sql lite may be another option as well
-
     constructor(id, name, durationList) {
         this.id = id;
         this.name = name;
         this.durationList = Object.values(durationList);
         this.markedForRemoval = false;
-    }
-
-    getName() {
-        return this.name;
+        this.markedForUpdate = false;
     }
 
     addHabit(){    
@@ -24,8 +14,7 @@ class Habit{
         let checkbox = document.createElement('input');
         checkbox.type = "checkbox";
         checkbox.setAttribute('data-habit-id', this.id);
-        checkbox.setAttribute('action', "javascript:;");
-        checkbox.setAttribute('onChange', "checkBoxChange(this)");
+        checkbox.addEventListener("change", (e) => this.updateCheckboxState(e));
 
         let newElement = document.createElement('div');
         newElement.setAttribute('data-habit-id', this.id);
@@ -39,22 +28,22 @@ class Habit{
         tableDiv.appendChild(newElement);
 
         //use for each loop on duration list
-        //todo add listener that will update
         this.durationList.forEach((entry, i) => {
-            //create element
+            //create input
+            const input = document.createElement('input');
+            input.type = "number";
+            input.min = "0";
+            input.className = "timeInput";
+            input.setAttribute('data-habit', this.name);
+            input.placeholder = "# mins";
+            input.value = entry;
+
+            // add listener directly to input
+            input.addEventListener("change", (e) => this.updateDurationList(i, e));
+
             newElement = document.createElement('div');
             newElement.setAttribute('data-habit-id', this.id);
-            newElement.innerHTML = `
-            <div>
-                <input type="number" 
-                min="0" 
-                oninput="toggleComplete()" 
-                class = "timeInput" 
-                data-habit = ${this.name} 
-                placeholder = # mins
-                value = ${entry}>
-            </div>`;
-            newElement.addEventListener("change", (e) => this.updateDurationList(i, e));
+            newElement.appendChild(input);
             tableDiv.appendChild(newElement);
         });
 
@@ -64,26 +53,13 @@ class Habit{
         //mark the current habit as dirty?
         const value = parseInt(event.target.value) || 0;
         this.durationList[index] = value;
+        this.markedForUpdate = true;
         console.log(`Updated habit ${this.name} (${index}) to ${value} mins`);
     }
 
-    updateCheckboxState(state){
-        this.markedForRemoval = state;
-        console.log(`Habit id: ${this.id}, Updated State -> ${this.markedForRemoval}`);
-    }
-
-    removeHabit(){
-        //console.log("trying to remove element: " + this.id);
-        //get all elements with this id
-    }
-
-    hideHabit(){
-        console.log(`hiding habit ${this.id}`);
-        //get all elements with this id as an attribute
-        let items = document.querySelectorAll(`[data-habit-id="${this.id}"]`);
-        items.forEach( (item) => {
-            item.style.display = 'none';
-        });
+    updateCheckboxState(event){
+        this.markedForRemoval = event.target.checked;
+        console.log(`Habit: ${this.id}, MarkedForRemoval State -> ${this.markedForRemoval}`);
     }
 
     toJson(userId, dateLookupId){
@@ -103,7 +79,6 @@ class Habit{
             date_lookup_id: dateLookupId,
             duration_list: durationObj
         };
-
     }
 
 }
